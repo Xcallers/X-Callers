@@ -1,180 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X Callers</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f0f4f8;
-      color: #1f2933;
-    }
-    header {
-      position: relative;
-      background: #1e3a8a;
-      color: #fff;
-      padding: 50px 20px;
-      text-align: center;
-    }
-    h1 { font-size: 2.8em; margin: 0; }
-    header p { font-size: 1.2em; margin-top: 10px; }
-    #themeToggle {
-      position: absolute; top: 20px; right: 20px;
-      padding: 8px 12px; border-radius: 8px; border: none;
-      cursor: pointer; font-weight: bold;
-      transition: transform 0.3s ease, color 0.3s ease;
-      background: transparent; color: #000000; font-size: 18px;
-    }
-    #themeToggle.dark-mode { color: #ffffff; }
-    #themeToggle:hover { transform: scale(1.2) rotate(20deg); }
-    section { max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative; }
-    h2 { color: #1e3a8a; margin-bottom: 12px; transition: color 0.3s ease; }
-    .card {
-      background: #ffffff; padding: 24px; border-radius: 14px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08); margin-bottom: 24px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
-      transform: scale(1); color: #1f2933; position: relative; font-weight: normal;
-    }
-    .card.hovering, .card.active {
-      background: #e0c4a0; color: #000000;
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
-    }
-    .contact-wrapper {
-      position: fixed; bottom: 20px; right: 20px;
-      display: flex; flex-direction: column; align-items: flex-end;
-      z-index: 1000;
-    }
-    .contact-button {
-      background: #ef4444; color: #ffffff; padding: 12px 16px;
-      border-radius: 8px; cursor: pointer; font-weight: 600;
-      transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
-    }
-    .contact-button:hover { background: #ffffff; color: #ef4444; transform: scale(1.05) rotate(-3deg); }
-    .contact-list {
-      display: flex; flex-direction: column; margin-top: 10px;
-      background: #ffffff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      overflow: hidden; max-height: 0; opacity: 0;
-      transition: max-height 0.4s ease, opacity 0.4s ease, transform 0.3s ease, background 0.3s ease;
-      transform: scale(0.95);
-    }
-    .contact-list.show {
-      max-height: 500px; opacity: 1;
-      transform: scale(1);
-    }
-    .contact-list a {
-      display: flex; align-items: center; gap: 8px;
-      padding: 12px 16px; color: #1e3a8a; text-decoration: none;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-    .contact-list a:hover { background: #e0f2fe; color: #1e3a8a; }
-    footer { text-align: center; padding: 20px; background: #e0f2fe; font-size: 14px; color: #000000; }
-    .dark { background: #111827; color: #ffffff; }
-    .dark header { background: #0f172a; color: #ffffff; }
-    .dark .card { background: #1f2937; color: #ffffff; }
-    .dark h2 { color: #22c55e; }
-    .dark a { color: #22c55e; }
-    .dark footer { color: #000000; }
-  </style>
-</head>
-<body>
-  <header>
-    <button id="themeToggle">🌙</button>
-    <h1>X Callers</h1>
-    <p>High-Converting Real Estate Lead Providers. Pay Per Lead</p>
-  </header>
-
-  <div class="contact-wrapper">
-    <div class="contact-button" id="contactBtn">Contact Us</div>
-    <div class="contact-list" id="contactList">
-      <a href="mailto:yourcompany@gmail.com"><span class="icon">📧</span> Email</a>
-      <a href="https://www.facebook.com/yourpage" target="_blank"><span class="icon">📘</span> Facebook</a>
-    </div>
-  </div>
-
-  <section>
-    <div class="card">
-      <h2>Our Services</h2>
-      <ul>
-        <li>Pay-Per-Lead (PPL) Campaigns: Performance-based model with no upfront risk; you only pay for qualified real estate leads</li>
-        <li>Cold Calling & Outreach: Dedicated teams of up to 20 experienced agents per campaign; we use our own dialers and cover all operational costs</li>
-        <li>Data & List Management: We can work with your data if preferred; our in-house lists consistently outperform industry averages</li>
-        <li>Full Campaign Management: End-to-end campaign setup and execution; no need to worry about dialers, data, or technical setup; you focus on closing deals — we handle the outreach</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Why Choose Us</h2>
-      <ul>
-        <li>Experienced and dedicated team</li>
-        <li>Results-driven outbound strategies</li>
-        <li>Fast communication and clear reporting</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>About Us</h2>
-      <p>We are a cold calling startup specializing in high-converting real estate lead generation across the U.S. Our focus is simple: delivering qualified, motivated leads that help our clients close more deals without the operational headaches. With over 3 years of consistent results, we work with real estate professionals who value performance, transparency, and scalable growth.</p>
-    </div>
-
-    <div class="card" id="cta">
-      <h2>Let’s Work Together</h2>
-      <p>If you're looking for a reliable outbound partner that delivers real results, let’s talk. No setup costs. No wasted time. Just qualified leads.</p>
-    </div>
-  </section>
-
-  <footer>© 2025 X Callers. All rights reserved.</footer>
-
-  <script>
-    const toggle = document.getElementById('themeToggle');
-    const body = document.body;
-    toggle.addEventListener('click', () => {
-      body.classList.toggle('dark');
-      toggle.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
-      toggle.classList.toggle('dark-mode');
-    });
-
-    const contactBtn = document.getElementById('contactBtn');
-    const contactList = document.getElementById('contactList');
-    contactBtn.addEventListener('click', () => {
-      if(contactList.classList.contains('show')) {
-        // إعادة حالة القائمة للوضع الطبيعي عند الإغلاق
-        contactList.classList.remove('show');
-        contactList.style.transform = 'scale(0.95)';
-        contactList.style.opacity = '0';
-        contactList.style.background = '#ffffff';
-      } else {
-        contactList.classList.add('show');
-        contactList.style.transform = 'scale(1)';
-        contactList.style.opacity = '1';
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X Callers</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f0f4f8;
+        --text: #1f2933;
+        --header-bg: #1e3a8a;
+        --card-bg: #ffffff;
+        --card-active-bg: #e8d8c5;
+        --primary: #1e3a8a;
+        --accent: #ef4444;
+        --contact-list-bg: #ffffff;
+        --footer-bg: #e0f2fe;
+        --muted-shadow: rgba(0, 0, 0, 0.08);
       }
-    });
+      .dark {
+        --bg: #0b1220;
+        --text: #e6eef8;
+        --header-bg: #0f172a;
+        --card-bg: #111827;
+        --card-active-bg: rgba(255, 255, 255, 0.04);
+        --primary: #22c55e;
+        --contact-list-bg: #0f172a;
+        --footer-bg: #071025;
+        --muted-shadow: rgba(0, 0, 0, 0.25);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        line-height: 1.45;
+      }
+      header {
+        position: relative;
+        background: var(--header-bg);
+        color: #fff;
+        padding: 48px 20px;
+        text-align: center;
+      }
+      h1 {
+        font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+        margin: 0;
+      }
+      header p {
+        font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+        margin-top: 10px;
+        opacity: 0.95;
+      }
 
-    const cards = document.querySelectorAll('.card');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        cards.forEach(c => c.classList.remove('active'));
-        if(entry.isIntersecting && !entry.target.classList.contains('hovering')){
-          entry.target.classList.add('active');
+      /* Theme toggle */
+      #themeToggle {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.18s ease, background 0.18s ease;
+        backdrop-filter: blur(4px);
+      }
+      #themeToggle:hover {
+        transform: scale(1.05);
+      }
+
+      section {
+        max-width: 960px;
+        margin: 32px auto;
+        padding: 0 18px;
+      }
+      h2 {
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        padding: 22px;
+        border-radius: 14px;
+        box-shadow: 0 6px 18px var(--muted-shadow);
+        margin-bottom: 20px;
+        transition: transform 0.22s ease, box-shadow 0.22s ease,
+          background 0.22s ease;
+      }
+      .card.active,
+      .card.hovering {
+        background: var(--card-active-bg);
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      }
+
+      /* Contact floating action */
+      .contact-wrapper {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 1200;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      /* use a real button for accessibility */
+      .contact-button {
+        appearance: none;
+        border: 0;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        transition: transform 0.18s ease, background 0.18s ease,
+          color 0.18s ease;
+      }
+      .contact-button:hover {
+        transform: translateY(-3px) scale(1.03);
+      }
+      .contact-button:focus {
+        outline: 3px solid rgba(30, 64, 175, 0.12);
+      }
+      /* open state mimics hover but more pronounced */
+      .contact-button.open {
+        background: #fff;
+        color: var(--accent);
+        transform: scale(1.05) rotate(-3deg);
+      }
+
+      .contact-list {
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        margin-top: 12px;
+        background: var(--contact-list-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+        transform-origin: top right;
+        transition: max-height 0.36s cubic-bezier(0.2, 0.9, 0.2, 1),
+          opacity 0.22s ease, transform 0.22s ease;
+      }
+      .contact-list.show {
+        max-height: 320px;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      .contact-list a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 14px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .contact-list a:hover {
+        background: rgba(30, 59, 138, 0.501);
+      }
+
+      footer {
+        padding: 18px;
+        text-align: center;
+        background: var(--footer-bg);
+        color: var(--text);
+        font-size: 14px;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .contact-list {
+          width: 180px;
+        }
+        header {
+          padding: 34px 16px;
+        }
+        .contact-button {
+          padding: 10px 14px;
+          border-radius: 10px;
+        }
+        section {
+          margin: 20px auto;
+          padding: 0 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button id="themeToggle">🌙</button>
+      <h1>X Callers</h1>
+      <p>High-Converting Real Estate Lead Providers. Pay Per Lead</p>
+    </header>
+
+    <div class="contact-wrapper">
+      <button
+        class="contact-button"
+        id="contactBtn"
+        aria-expanded="false"
+        aria-controls="contactList"
+      >
+        Contact Us
+      </button>
+      <div class="contact-list" id="contactList" role="menu" aria-hidden="true">
+        <a href="mailto:yourcompany@gmail.com"
+          ><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">
+<path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z"></path><path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343-3-3V16.2z"></path><polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"></polygon><path fill="#c62828" d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0C4.924,8,3,9.924,3,12.298z"></path><path fill="#fbc02d" d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0 C43.076,8,45,9.924,45,12.298z"></path>
+</svg></span> Email</a
+        >
+        <a href="https://www.facebook.com/yourpage" target="_blank"
+          ><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">
+<path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"></path><path fill="#fff" d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"></path>
+</svg></span> Facebook</a
+        >
+      </div>
+    </div>
+
+    <section>
+      <div class="card">
+        <h2>Our Services</h2>
+        <ul>
+          <li>
+            Pay-Per-Lead (PPL) Campaigns: Performance-based model with no
+            upfront risk; you only pay for qualified real estate leads
+          </li>
+          <li>
+            Cold Calling & Outreach: Dedicated teams of up to 20 experienced
+            agents per campaign; we use our own dialers and cover all
+            operational costs
+          </li>
+          <li>
+            Data & List Management: We can work with your data if preferred; our
+            in-house lists consistently outperform industry averages
+          </li>
+          <li>
+            Full Campaign Management: End-to-end campaign setup and execution;
+            no need to worry about dialers, data, or technical setup; you focus
+            on closing deals — we handle the outreach
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Why Choose Us</h2>
+        <ul>
+          <li>Experienced and dedicated team</li>
+          <li>Results-driven outbound strategies</li>
+          <li>Fast communication and clear reporting</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>About Us</h2>
+        <p>
+          We are a cold calling startup specializing in high-converting real
+          estate lead generation across the U.S. Our focus is simple: delivering
+          qualified, motivated leads that help our clients close more deals
+          without the operational headaches. With over 3 years of consistent
+          results, we work with real estate professionals who value performance,
+          transparency, and scalable growth.
+        </p>
+      </div>
+
+      <div class="card" id="cta">
+        <h2>Let’s Work Together</h2>
+        <p>
+          If you're looking for a reliable outbound partner that delivers real
+          results, let’s talk. No setup costs. No wasted time. Just qualified
+          leads.
+        </p>
+      </div>
+    </section>
+
+    <footer>© 2025 X Callers. All rights reserved.</footer>
+
+    <script>
+      const toggle = document.getElementById("themeToggle");
+      const body = document.body;
+      toggle.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+        toggle.classList.toggle("dark-mode");
+      });
+
+      const contactBtn = document.getElementById("contactBtn");
+      const contactList = document.getElementById("contactList");
+      // Toggle contact menu in an accessible way
+      contactBtn.addEventListener("click", () => {
+        const isOpen = contactList.classList.contains("show");
+        if (isOpen) {
+          // close
+          contactList.classList.remove("show");
+          contactList.setAttribute("aria-hidden", "true");
+          contactBtn.classList.remove("open");
+          contactBtn.setAttribute("aria-expanded", "false");
+          // remove any inline styles to revert to CSS defaults
+          contactList.style.transform = "";
+          contactList.style.opacity = "";
+          // blur to avoid touch devices keeping :focus styles
+          contactBtn.blur();
+        } else {
+          // open
+          contactList.classList.add("show");
+          contactList.setAttribute("aria-hidden", "false");
+          contactBtn.classList.add("open");
+          contactBtn.setAttribute("aria-expanded", "true");
         }
       });
-    }, { threshold: 0.3 });
-    cards.forEach(card => observer.observe(card));
 
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        cards.forEach(c => c.classList.remove('active'));
-        card.classList.add('hovering');
-        card.classList.add('active');
+      const cards = document.querySelectorAll(".card");
+
+      // Instead of relying solely on IntersectionObserver, use a scroll-based
+      // method that finds the card whose center is closest to the viewport center
+      // and sets it active. This is more reliable on mobile for the 'centered' effect.
+      function isMobile() {
+        return window.matchMedia("(max-width: 600px)").matches;
+      }
+      function getTolerance() {
+        return isMobile()
+          ? window.innerHeight * 0.18
+          : window.innerHeight * 0.12;
+      }
+
+      function updateActiveCard() {
+        // Only apply the scroll-centered 'active' behavior on mobile
+        if (!isMobile()) {
+          // clear any active states so desktop relies on hover only
+          cards.forEach((c) => c.classList.remove("active"));
+          return;
+        }
+        const viewportCenter = window.innerHeight / 2;
+        let closest = null;
+        let minDist = Infinity;
+
+        // if user scrolled to (or near) the bottom, activate the last card
+        const nearBottom =
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 60;
+        if (nearBottom) {
+          const last = cards[cards.length - 1];
+          // don't override a hovered state
+          if (last && !last.classList.contains("hovering")) {
+            cards.forEach((c) => c.classList.remove("active"));
+            last.classList.add("active");
+            return;
+          }
+        }
+
+        cards.forEach((card) => {
+          // skip cards currently hovered by mouse
+          if (card.classList.contains("hovering")) return;
+          const rect = card.getBoundingClientRect();
+          // skip cards fully off-screen to avoid accidental activation
+          if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+          const cardCenter = rect.top + rect.height / 2;
+          const dist = Math.abs(cardCenter - viewportCenter);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = card;
+          }
+        });
+
+        // clear previous active states and set only the closest (if within tolerance)
+        cards.forEach((c) => c.classList.remove("active"));
+        if (closest && minDist <= getTolerance()) {
+          closest.classList.add("active");
+        }
+      }
+
+      // throttle using RAF to keep updates smooth
+      let ticking = false;
+      function scheduleUpdate() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateActiveCard();
+          ticking = false;
+        });
+      }
+
+      window.addEventListener("scroll", scheduleUpdate, { passive: true });
+      window.addEventListener("resize", scheduleUpdate);
+      window.addEventListener("load", () => {
+        updateActiveCard();
       });
-      card.addEventListener('mouseleave', () => {
-        card.classList.remove('hovering');
-        card.classList.remove('active');
+      // initial run
+      updateActiveCard();
+
+      cards.forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          cards.forEach((c) => c.classList.remove("active"));
+          card.classList.add("hovering");
+          card.classList.add("active");
+        });
+        card.addEventListener("mouseleave", () => {
+          card.classList.remove("hovering");
+          card.classList.remove("active");
+        });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
