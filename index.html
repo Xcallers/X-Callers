@@ -688,6 +688,72 @@
           height: 36px;
         }
       }
+
+      /* Fullscreen: ensure controls dock to the bottom and span full width.
+         Support standard and vendor-prefixed fullscreen pseudo-classes. */
+      .modal-content:fullscreen .player-controls,
+      .modal-content:-webkit-full-screen .player-controls,
+      .modal-content:-moz-full-screen .player-controls,
+      .player-controls.fullscreen-controls {
+        position: absolute !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 12px 18px;
+        background: linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.78),
+          rgba(0, 0, 0, 0.36)
+        );
+        z-index: 9999;
+        box-shadow: none;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      /* Make fullscreen modal content fill viewport and remove rounded corners */
+      .modal-content:fullscreen,
+      .modal-content:-webkit-full-screen,
+      .modal-content:-moz-full-screen {
+        width: 100% !important;
+        height: 100vh !important;
+        max-width: 100% !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+      }
+
+      /* Hide the modal info panel in fullscreen to provide an immersive video view */
+      .modal-content:fullscreen .modal-info,
+      .modal-content:-webkit-full-screen .modal-info,
+      .modal-content:-moz-full-screen .modal-info,
+      /* also hide when we apply the fullscreen-controls class (JS-driven fallback) */
+      .player-controls.fullscreen-controls ~ .modal-info,
+      .player-controls.fullscreen-controls + .modal-info {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+      }
+
+      /* Make sure the controls row stretches and items remain accessible */
+      .modal-content:fullscreen .controls-row,
+      .player-controls.fullscreen-controls .controls-row {
+        align-items: center;
+        gap: 14px;
+        justify-content: space-between;
+      }
+
+      /* Ensure the media area uses full height in fullscreen so the controls overlay nicely */
+      .modal-content:fullscreen .modal-media-container,
+      .modal-content:-webkit-full-screen .modal-media-container {
+        height: 100vh;
+        padding-bottom: 0;
+      }
     </style>
   </head>
   <body>
@@ -881,6 +947,24 @@
               >
                 <i class="fas fa-forward"></i>
               </button>
+
+              <button
+                class="control-btn fullscreen"
+                id="fullscreenBtn"
+                title="Fullscreen"
+                style="display: none"
+              >
+                <i class="fas fa-expand" id="fullscreenIcon"></i>
+              </button>
+
+              <button
+                class="control-btn exit-fullscreen"
+                id="exitFullscreenBtn"
+                title="Exit Fullscreen"
+                style="display: none"
+              >
+                ✕
+              </button>
             </div>
 
             <button class="speed-control" id="speedBtn" title="Playback Speed">
@@ -1071,6 +1155,7 @@
       const modalMediaContainer = document.getElementById(
         "modalMediaContainer"
       );
+      const modalContent = document.querySelector(".modal-content");
       const modalTitle = document.getElementById("modalTitle");
       const modalDescription = document.getElementById("modalDescription");
       const modalDuration = document.getElementById("modalDuration");
@@ -1081,6 +1166,9 @@
       const playIcon = document.getElementById("playIcon");
       const rewindBtn = document.getElementById("rewindBtn");
       const forwardBtn = document.getElementById("forwardBtn");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const fullscreenIcon = document.getElementById("fullscreenIcon");
+      const exitFullscreenBtn = document.getElementById("exitFullscreenBtn");
       const progressBar = document.getElementById("progressBar");
       const progressContainer = document.getElementById("progressContainer");
       const currentTimeEl = document.getElementById("currentTime");
@@ -1089,6 +1177,7 @@
       const volumeToggle = document.getElementById("volumeToggle");
       const volumeIcon = document.getElementById("volumeIcon");
       const speedBtn = document.getElementById("speedBtn");
+      const modalInfoEl = document.querySelector(".modal-info");
 
       let currentMedia = null;
       let isSeeking = false;
@@ -1132,6 +1221,32 @@
         speedBtn.addEventListener("click", changePlaybackSpeed);
         progressContainer.addEventListener("click", seekToPosition);
 
+        // Show fullscreen button only for video elements
+        if (
+          mediaElement.tagName &&
+          mediaElement.tagName.toLowerCase() === "video"
+        ) {
+          fullscreenBtn.style.display = "flex";
+          fullscreenBtn.addEventListener("click", toggleFullscreen);
+        } else {
+          fullscreenBtn.style.display = "none";
+          try {
+            fullscreenBtn.removeEventListener("click", toggleFullscreen);
+          } catch (e) {}
+        }
+
+        // Ensure exit fullscreen button will attempt to exit any fullscreen state
+        if (exitFullscreenBtn) {
+          exitFullscreenBtn.addEventListener("click", () => {
+            if (document.fullscreenElement) {
+              if (document.exitFullscreen) document.exitFullscreen();
+              else if (document.webkitExitFullscreen)
+                document.webkitExitFullscreen();
+              else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+          });
+        }
+
         // For smoother seeking
         progressContainer.addEventListener(
           "mousedown",
@@ -1162,6 +1277,59 @@
           }
         });
       }
+
+      // Toggle fullscreen using Fullscreen API on the modal media container
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          // request fullscreen on the entire modal content so the player controls
+          // remain available inside fullscreen and can be positioned at the bottom
+          const el = modalContent || modalMediaContainer;
+          if (el.requestFullscreen) el.requestFullscreen();
+          else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+          else if (el.msRequestFullscreen) el.msRequestFullscreen();
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+          else if (document.webkitExitFullscreen)
+            document.webkitExitFullscreen();
+          else if (document.msExitFullscreen) document.msExitFullscreen();
+        }
+      }
+
+      // Update fullscreen icon/title on change (handle vendor-prefixed events too)
+      function handleFullscreenChange() {
+        const isFull = !!(
+          document.fullscreenElement ||
+          document.webkitFullscreenElement ||
+          document.mozFullScreenElement ||
+          document.msFullscreenElement
+        );
+
+        if (isFull) {
+          fullscreenIcon.className = "fas fa-compress";
+          fullscreenBtn.setAttribute("title", "Exit Fullscreen");
+          if (exitFullscreenBtn) exitFullscreenBtn.style.display = "flex";
+          if (playerControls)
+            playerControls.classList.add("fullscreen-controls");
+          // JS fallback to hide info panel in fullscreen
+          if (modalInfoEl) modalInfoEl.style.display = "none";
+        } else {
+          fullscreenIcon.className = "fas fa-expand";
+          fullscreenBtn.setAttribute("title", "Fullscreen");
+          if (exitFullscreenBtn) exitFullscreenBtn.style.display = "none";
+          if (playerControls)
+            playerControls.classList.remove("fullscreen-controls");
+          // restore info panel
+          if (modalInfoEl) modalInfoEl.style.display = "";
+        }
+      }
+
+      document.addEventListener("fullscreenchange", handleFullscreenChange);
+      document.addEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange
+      );
+      document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+      document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
       // Update play/pause button
       function updatePlayPauseButton() {
@@ -1319,6 +1487,23 @@
         volumeIcon.className = "fas fa-volume-up";
         speedBtn.textContent = "1x";
         currentSpeedIndex = 2;
+
+        // Hide fullscreen button and ensure fullscreen is exited
+        if (fullscreenBtn) {
+          fullscreenBtn.style.display = "none";
+          try {
+            fullscreenBtn.removeEventListener("click", toggleFullscreen);
+          } catch (e) {}
+        }
+        if (exitFullscreenBtn) {
+          exitFullscreenBtn.style.display = "none";
+          try {
+            // no-op removal in case a listener exists; handler was an anonymous arrow so skip remove
+          } catch (e) {}
+        }
+        if (document.fullscreenElement) {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
       }
 
       // Handle click on media cards
@@ -1459,8 +1644,7 @@
 
         // Arrow keys for seeking
         if (mediaModal.classList.contains("active") && currentMedia) {
-          if (e.key === "ArrowLeft") {
-            e.preventDefault();
+          if (e.key === "ArrowLeft") {e.preventDefault();
             rewindMedia();
           } else if (e.key === "ArrowRight") {
             e.preventDefault();
@@ -1473,6 +1657,10 @@
         cleanupPlayerControls();
         mediaModal.classList.remove("active");
         document.body.style.overflow = "auto";
+        // If user closed modal while in fullscreen, exit fullscreen
+        if (document.fullscreenElement) {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
       }
 
       // Existing card hover functionality
