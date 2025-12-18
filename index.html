@@ -28,7 +28,6 @@
         --player-bg: #1a1a1a;
         --player-controls: #333;
         --player-highlight: #ef4444;
-        /* scale tokens added per request */
         --card-scale: 1.04;
         --media-card-scale: 1.06;
         --button-scale: 1.08;
@@ -47,7 +46,6 @@
         --overlay-bg: rgba(0, 0, 0, 0.92);
         --player-bg: #0a0a0a;
         --player-controls: #222;
-        /* mirror scale tokens in dark theme */
         --card-scale: 1.04;
         --media-card-scale: 1.06;
         --button-scale: 1.08;
@@ -729,7 +727,6 @@
       .modal-content:fullscreen .modal-info,
       .modal-content:-webkit-full-screen .modal-info,
       .modal-content:-moz-full-screen .modal-info,
-      /* also hide when we apply the fullscreen-controls class (JS-driven fallback) */
       .player-controls.fullscreen-controls ~ .modal-info,
       .player-controls.fullscreen-controls + .modal-info {
         display: none !important;
@@ -1009,14 +1006,48 @@
     <footer>© 2025 X Callers. All rights reserved.</footer>
 
     <script>
-      // Theme toggle
+      // ============================================
+      // LOCAL STORAGE للثيم - هنا التعديلات
+      // ============================================
+      
+      // Theme toggle with local storage
       const toggle = document.getElementById("themeToggle");
       const body = document.body;
+
+      // تحقق من التفضيل المحفوظ عند تحميل الصفحة
+      function loadThemePreference() {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+          body.classList.add("dark");
+          toggle.textContent = "☀️";
+        } else {
+          body.classList.remove("dark");
+          toggle.textContent = "🌙";
+        }
+      }
+
+      // تحميل التفضيل عند فتح الصفحة
+      loadThemePreference();
+
+      // عند النقر على زر تغيير الثيم
       toggle.addEventListener("click", () => {
         body.classList.toggle("dark");
-        toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+
+        // حفظ التفضيل في local storage
+        if (body.classList.contains("dark")) {
+          localStorage.setItem("theme", "dark");
+          toggle.textContent = "☀️";
+        } else {
+          localStorage.setItem("theme", "light");
+          toggle.textContent = "🌙";
+        }
+
         toggle.classList.toggle("dark-mode");
       });
+
+      // ============================================
+      // باقي الكود كما هو بدون تغيير
+      // ============================================
 
       // Contact button functionality
       const contactBtn = document.getElementById("contactBtn");
@@ -1644,7 +1675,8 @@
 
         // Arrow keys for seeking
         if (mediaModal.classList.contains("active") && currentMedia) {
-          if (e.key === "ArrowLeft") {e.preventDefault();
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
             rewindMedia();
           } else if (e.key === "ArrowRight") {
             e.preventDefault();
